@@ -1,47 +1,61 @@
-import { Alerta } from "@/lib/types";
+import { NextResponse } from 'next/server';
+import { Alerta } from '@/lib/types';
 
+// In-memory alertas array
 let alertas: Alerta[] = [
     {
-        id: 1,
-        nivel: "verde",
-        mensaje: "Todo está bien.",
-        fechaCreacion: new Date().toISOString(),
+        id: '1',
+        descripcionCorta: 'Alerta Verde',
+        descripcionLarga: 'Situación normal - Todo está bajo control',
+        afectacion: 'Interna',
+        nivelAlerta: 'verde',
+        emailsNotificacion: [],
+        activa: true,
+        fechaCreacion: new Date().toISOString()
     },
     {
-        id: 2,
-        nivel: "naranja",
-        mensaje: "Alerta moderada.",
-        fechaCreacion: new Date().toISOString(),
+        id: '2',
+        descripcionCorta: 'Alerta Naranja',
+        descripcionLarga: 'Precaución requerida - Se recomienda estar atento',
+        afectacion: 'Pais',
+        nivelAlerta: 'naranja',
+        emailsNotificacion: ['alerta@example.com'],
+        activa: true,
+        fechaCreacion: new Date().toISOString()
     },
     {
-        id: 3,
-        nivel: "rojo",
-        mensaje: "Alerta crítica.",
-        fechaCreacion: new Date().toISOString(),
+        id: '3',
+        descripcionCorta: 'Alerta Roja',
+        descripcionLarga: 'Emergencia - Situación crítica que requiere atención inmediata',
+        afectacion: 'Mundial',
+        nivelAlerta: 'rojo',
+        emailsNotificacion: ['alerta@example.com', 'urgente@example.com'],
+        activa: true,
+        fechaCreacion: new Date().toISOString()
     },
 ];
 
-// Handle GET requests to return all alertas
-export const GET = async () => {
-    return new Response(JSON.stringify(alertas), {
-        status: 200,
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-};
+// GET - Listar todas las alertas
+export async function GET() {
+    return NextResponse.json(alertas);
+}
 
-// Handle POST requests to create a new alerta
-export const POST = async (request: Request) => {
-    const newAlerta: Alerta = await request.json();
-    newAlerta.id = alertas.length + 1; // Auto-generate ID
-    newAlerta.fechaCreacion = new Date().toISOString(); // Set creation date
+// POST - Crear nueva alerta
+export async function POST(request: Request) {
+    const data = await request.json();
+    
+    const newAlerta: Alerta = {
+        id: crypto.randomUUID(),
+        descripcionCorta: data.descripcionCorta,
+        descripcionLarga: data.descripcionLarga,
+        afectacion: data.afectacion,
+        nivelAlerta: data.nivelAlerta,
+        emailsNotificacion: data.emailsNotificacion || [],
+        activa: true,
+        fechaCreacion: new Date().toISOString()
+    };
+    
     alertas.push(newAlerta);
-
-    return new Response(JSON.stringify(newAlerta), {
-        status: 201,
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-};
+    
+    return NextResponse.json(newAlerta, { status: 201 });
+}
