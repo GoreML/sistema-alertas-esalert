@@ -1,27 +1,60 @@
+import { SomeType } from './types';
+
 const API_BASE_URL = '/api';
 
-async function updateAlerta(alerta) {
-    const response = await fetch(`${API_BASE_URL}/alertas/${alerta.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(alerta),
-        cache: 'no-store',
-    });
-    return response.json();
+class AlertasAPI {
+    private async request(endpoint: string, options: RequestInit = {}) {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            ...options,
+            cache: 'no-store',
+        });
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+        return response.json();
+    }
+
+    public getAlertas() {
+        return this.request('/alertas');
+    }
+
+    public getAlerta(id: string) {
+        return this.request(`/alertas/${id}`);
+    }
+
+    public createAlerta(data: any) {
+        return this.request('/alertas', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
+
+    public updateAlerta(id: string, data: any) {
+        return this.request(`/alertas/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    }
+
+    public deleteAlerta(id: string) {
+        return this.request(`/alertas/${id}`, {
+            method: 'DELETE',
+        });
+    }
+
+    public searchAlertas(query: string) {
+        return this.request(`/alertas/search?query=${encodeURIComponent(query)}`);
+    }
+
+    public getAlertasByNivel(nivel: string) {
+        return this.request(`/alertas/nivel/${nivel}`);
+    }
 }
 
-async function fetchAlertas() {
-    const response = await fetch(`${API_BASE_URL}/alertas`, {
-        cache: 'no-store',
-    });
-    return response.json();
-}
-
-async function fetchAlerta(id) {
-    const response = await fetch(`${API_BASE_URL}/alertas/${id}`, {
-        cache: 'no-store',
-    });
-    return response.json();
-}
+export const alertasAPI = new AlertasAPI();
