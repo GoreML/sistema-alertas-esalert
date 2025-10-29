@@ -1,60 +1,65 @@
-import { SomeType } from './types';
+import { Alerta, CreateAlertaDTO, UpdateAlertaDTO } from './types';
 
 const API_BASE_URL = '/api';
 
 class AlertasAPI {
-    private async request(endpoint: string, options: RequestInit = {}) {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            ...options,
-            cache: 'no-store',
-        });
+    private async request<T>(url: string, options: RequestInit): Promise<T> {
+        const response = await fetch(url, { ...options, cache: 'no-store' });
         if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     }
 
-    public getAlertas() {
-        return this.request('/alertas');
+    public async getAlertas(): Promise<Alerta[]> {
+        return this.request<Alerta[]>(`${API_BASE_URL}/alertas`, {
+            method: 'GET',
+        });
     }
 
-    public getAlerta(id: string) {
-        return this.request(`/alertas/${id}`);
+    public async getAlerta(id: string): Promise<Alerta> {
+        return this.request<Alerta>(`${API_BASE_URL}/alertas/${id}`, {
+            method: 'GET',
+        });
     }
 
-    public createAlerta(data: any) {
-        return this.request('/alertas', {
+    public async createAlerta(data: CreateAlertaDTO): Promise<Alerta> {
+        return this.request<Alerta>(`${API_BASE_URL}/alertas`, {
             method: 'POST',
-            body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify(data),
         });
     }
 
-    public updateAlerta(id: string, data: any) {
-        return this.request(`/alertas/${id}`, {
+    public async updateAlerta(id: string, data: UpdateAlertaDTO): Promise<Alerta> {
+        return this.request<Alerta>(`${API_BASE_URL}/alertas/${id}`, {
             method: 'PUT',
-            body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify(data),
         });
     }
 
-    public deleteAlerta(id: string) {
-        return this.request(`/alertas/${id}`, {
+    public async deleteAlerta(id: string): Promise<void> {
+        return this.request<void>(`${API_BASE_URL}/alertas/${id}`, {
             method: 'DELETE',
         });
     }
 
-    public searchAlertas(query: string) {
-        return this.request(`/alertas/search?query=${encodeURIComponent(query)}`);
+    public async searchAlertas(query: string): Promise<Alerta[]> {
+        return this.request<Alerta[]>(`${API_BASE_URL}/alertas/search?q=${encodeURIComponent(query)}`, {
+            method: 'GET',
+        });
     }
 
-    public getAlertasByNivel(nivel: string) {
-        return this.request(`/alertas/nivel/${nivel}`);
+    public async getAlertasByNivel(nivel: string): Promise<Alerta[]> {
+        return this.request<Alerta[]>(`${API_BASE_URL}/alertas/nivel/${nivel}`, {
+            method: 'GET',
+        });
     }
 }
 
-export const alertasAPI = new AlertasAPI();
+export default new AlertasAPI();
