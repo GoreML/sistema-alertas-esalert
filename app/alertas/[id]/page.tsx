@@ -100,4 +100,5 @@ export default async function AlertaDetailPage({
         </div>
       </div>
     </main>
+  );
 }
