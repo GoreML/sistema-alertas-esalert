@@ -1,12 +1,6 @@
 import { NextResponse } from 'next/server';
-import { Alerta } from '@/lib/types'; // ✅ CORRECTO
-
-// In-memory alertas array
-let alertas: Alerta[] = [
-    { id: '1', descripcionCorta: 'Alerta Verde', descripcionLarga: 'Situación normal', afectacion: 'Interna', nivelAlerta: 'verde', emailsNotificacion: [], activa: true, fechaCreacion: new Date().toISOString(), fechaModificacion: undefined  },
-    { id: '2', descripcionCorta: 'Alerta Naranja', descripcionLarga: 'Precaución requerida', afectacion: 'Pais', nivelAlerta: 'naranja', emailsNotificacion: ['alerta@example.com'], activa: true, fechaCreacion: new Date().toISOString(), fechaModificacion: undefined  },
-    { id: '3', descripcionCorta: 'Alerta Roja', descripcionLarga: 'Emergencia', afectacion: 'Mundial', nivelAlerta: 'rojo', emailsNotificacion: ['alerta@example.com'], activa: true, fechaCreacion: new Date().toISOString(), fechaModificacion: undefined  },
-];
+import { Alerta } from '@/lib/types';
+import { alertas } from '@/lib/data';
 
 // GET function to find alerta by ID
 export async function GET(req: Request, { params }: { params: { id: string } }) {
