@@ -1,12 +1,10 @@
-import { alertasAPI } from '@/lib/api';
+import { alertas } from '@/lib/data';
 import { AlertasList } from '@/components/alertas/AlertasList';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AlertasPage() {
-  const alertas = await alertasAPI.getAlertas();
-
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
