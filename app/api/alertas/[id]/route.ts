@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Alerta } from '../../../types'; // Adjust the import path as necessary
+import { Alerta } from '@/lib/types'; // ✅ CORRECTO
 
 // In-memory alertas array
 let alertas: Alerta[] = [
