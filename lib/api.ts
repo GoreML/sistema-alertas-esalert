@@ -62,4 +62,4 @@ class AlertasAPI {
     }
 }
 
-export default new AlertasAPI();
+export const alertasAPI = new AlertasAPI();
