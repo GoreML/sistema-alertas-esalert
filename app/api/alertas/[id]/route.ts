@@ -3,9 +3,9 @@ import { Alerta } from '@/lib/types'; // ✅ CORRECTO
 
 // In-memory alertas array
 let alertas: Alerta[] = [
-    { id: '1', descripcionCorta: 'Alerta Verde', descripcionLarga: 'Situación normal', afectacion: 'Ninguna', nivelAlerta: 'verde', emailsNotificacion: [], activa: true, fechaCreacion: new Date(), fechaModificacion: null },
-    { id: '2', descripcionCorta: 'Alerta Naranja', descripcionLarga: 'Precaución requerida', afectacion: 'Moderada', nivelAlerta: 'naranja', emailsNotificacion: ['alerta@example.com'], activa: true, fechaCreacion: new Date(), fechaModificacion: null },
-    { id: '3', descripcionCorta: 'Alerta Roja', descripcionLarga: 'Emergencia', afectacion: 'Alta', nivelAlerta: 'rojo', emailsNotificacion: ['alerta@example.com'], activa: true, fechaCreacion: new Date(), fechaModificacion: null },
+    { id: '1', descripcionCorta: 'Alerta Verde', descripcionLarga: 'Situación normal', afectacion: 'Ninguna', nivelAlerta: 'verde', emailsNotificacion: [], activa: true, fechaCreacion: new Date().toISOString(), fechaModificacion: null },
+    { id: '2', descripcionCorta: 'Alerta Naranja', descripcionLarga: 'Precaución requerida', afectacion: 'Moderada', nivelAlerta: 'naranja', emailsNotificacion: ['alerta@example.com'], activa: true, fechaCreacion: new Date().toISOString(), fechaModificacion: null },
+    { id: '3', descripcionCorta: 'Alerta Roja', descripcionLarga: 'Emergencia', afectacion: 'Alta', nivelAlerta: 'rojo', emailsNotificacion: ['alerta@example.com'], activa: true, fechaCreacion: new Date().toISOString(), fechaModificacion: null },
 ];
 
 // GET function to find alerta by ID
@@ -24,8 +24,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         return NextResponse.json({ message: 'Alerta no encontrada' }, { status: 404 });
     }
     const data = await req.json();
-    alertas[index] = { ...alertas[index], ...data, fechaModificacion: new Date() };
-    return NextResponse.json({ message: 'Alerta actualizada' });
+    alertas[index] = { ...alertas[index], ...data, fechaModificacion: new Date().toISOString() };
+    return NextResponse.json(alertas[index]);
 }
 
 // DELETE function to remove alerta by ID
