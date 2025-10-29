@@ -1,6 +1,9 @@
 import { Alerta, CreateAlertaDTO, UpdateAlertaDTO } from './types';
 
-const API_BASE_URL = '/api';
+// Detectar si estamos en el servidor o cliente
+const API_BASE_URL = typeof window === 'undefined' 
+    ? process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
+    : '/api';
 
 class AlertasAPI {
     private async request<T>(url: string, options: RequestInit): Promise<T> {
